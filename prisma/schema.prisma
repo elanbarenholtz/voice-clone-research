@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  hashedPassword String
+  name           String?
+  isAdmin        Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  // Clone status
+  recordingUrl String? // stored audio (base64 or blob URL)
+  voiceId      String? // ElevenLabs voice_id
+  cloneStatus  String  @default("none") // none, recording, cloning, ready
+
+  // Agent
+  agentId       String? // ElevenLabs agent_id
+  phoneNumber   String? // Twilio number
+  phoneSid      String? // Twilio number SID
+  phoneNumberId String? // ElevenLabs phone number ID
+  isActive      Boolean @default(false)
+
+  // Personality
+  displayName   String?
+  pronunciation String?
+  bio           String?
+  personality   String?
+  greeting      String? @default("Hello?")
+  callerRules   String?
+  systemPrompt  String?
+
+  contacts Contact[]
+  calls    Call[]
+}
+
+model Contact {
+  id           String  @id @default(cuid())
+  userId       String
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  phone        String
+  relationship String?
+  notes        String?
+}
+
+model Call {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  callSid     String?
+  fromNumber  String
+  toNumber    String
+  startedAt   DateTime @default(now())
+  durationSec Int?
+  transcript  String?
+  summary     String?
+  status      String   @default("completed")
+}
