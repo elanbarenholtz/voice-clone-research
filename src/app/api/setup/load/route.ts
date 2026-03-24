@@ -13,13 +13,24 @@ export async function GET() {
     select: {
       displayName: true,
       pronunciation: true,
+      major: true,
+      year: true,
+      hometown: true,
       bio: true,
       personality: true,
+      interests: true,
+      speechStyle: true,
+      topics: true,
+      avoidTopics: true,
       greeting: true,
       callerRules: true,
       systemPrompt: true,
       contacts: {
-        select: { name: true, phone: true, relationship: true, notes: true },
+        select: {
+          name: true, phone: true, relationship: true,
+          nickname: true, personality: true, topics: true,
+          insideJokes: true, greeting: true, notes: true,
+        },
       },
     },
   });

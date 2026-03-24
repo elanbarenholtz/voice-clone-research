@@ -36,6 +36,15 @@ model User {
   callerRules   String?
   systemPrompt  String?
 
+  // Extended identity
+  major         String?  // what they study
+  year          String?  // freshman, sophomore, etc.
+  hometown      String?
+  interests     String?  // hobbies, interests
+  speechStyle   String?  // how they talk: slang, filler words, catchphrases
+  topics        String?  // things they like to talk about
+  avoidTopics   String?  // things to never bring up
+
   contacts Contact[]
   calls    Call[]
 }
@@ -46,8 +55,13 @@ model Contact {
   user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   name         String
   phone        String
-  relationship String?
-  notes        String?
+  relationship String? // e.g. best friend, mom, roommate, professor
+  nickname     String? // what the student calls them
+  personality  String? // brief description of how this person is
+  topics       String? // what they usually talk about together
+  insideJokes  String? // shared references, inside jokes
+  greeting     String? // how to greet this specific person
+  notes        String? // anything else the clone should know
 }
 
 model Call {
